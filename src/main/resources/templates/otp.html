@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>OTP Verification</title>
+    <style>
+        body { font-family: Arial; margin: 50px; }
+        .error { color: red; }
+        .timer { font-weight: bold; color: #d9534f; font-size: 18px; }
+        .expired { color: red; font-weight: bold; }
+        input { margin: 5px 0; padding: 8px; width: 200px; }
+        input:disabled { background: #eee; }
+    </style>
+</head>
+<body>
+    <h2>Enter OTP</h2>
+    <p>OTP sent by SMS on your registered mobile number. Valid for <span id="timer" class="timer">05:00 </span>min</p>
+    
+    <p id="expiredMsg" class="expired" style="display:none;">OTP Expired. Please login again.</p>
+    <p class="error" th:if="${error}" th:text="${error}"></p>
+
+    <form id="otpForm" th:action="@{/verify-otp}" method="post">
+        <div>
+            <label>6-Digit OTP:</label><br/>
+            <input type="number" id="otpInput" name="enteredOtp" required maxlength="6"/>
+        </div>
+        <br/>
+        <input type="submit" id="submitBtn" value="Verify"/>
+    </form>
+    
+    <br/>
+    <a th:href="@{/login}">Back to Login</a>
+
+    <script>
+        // 5 minutes = 300 seconds
+        let timeLeft = 300;
+        const timerElement = document.getElementById('timer');
+        const otpForm = document.getElementById('otpForm');
+        const otpInput = document.getElementById('otpInput');
+        const submitBtn = document.getElementById('submitBtn');
+        const expiredMsg = document.getElementById('expiredMsg');
+
+        const countdown = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                timerElement.textContent = "00:00";
+                expiredMsg.style.display = 'block';
+                otpInput.disabled = true;
+                submitBtn.disabled = true;
+            } else {
+                let minutes = Math.floor(timeLeft / 60);
+                let seconds = timeLeft % 60;
+                
+                // Add leading zero
+                minutes = minutes < 10 ? '0' + minutes : minutes;
+                seconds = seconds < 10 ? '0' + seconds : seconds;
+                
+                timerElement.textContent = minutes + ':' + seconds;
+                timeLeft--;
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
