@@ -13,15 +13,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.msedcl.mvc.main.dto.*;
+import com.msedcl.mvc.main.entity.CONSUMER_FROM_VW;
+import com.msedcl.mvc.main.repository.ConsumerlistFromVW;
 import com.msedcl.mvc.main.service.AllStatusCodesServiceImpl;
+import com.msedcl.mvc.main.service.ConsumerlistService;
 
 @Controller
 public class UIActionController {
 	
 	private final AllStatusCodesServiceImpl allStatuscodesImpl;
+	private final ConsumerlistService consumerlistFromVWImpl;
 
-	UIActionController(AllStatusCodesServiceImpl allStatuscodesImpl) {
+
+	UIActionController(AllStatusCodesServiceImpl allStatuscodesImpl,ConsumerlistService consumerlistFromVWImpl) {
 		this.allStatuscodesImpl = allStatuscodesImpl;
+		this.consumerlistFromVWImpl =consumerlistFromVWImpl;
 	}
 	@SuppressWarnings("static-access")
 	@GetMapping("/search")
@@ -41,7 +47,16 @@ public class UIActionController {
                                Model model) {
         
         System.out.println("Selected Status Codexx: " + statusCode); // 122, 135, etc yeil
-        return "/";
+     //   List<CONSUMER_FROM_VW> lst =consumerlistFromVWImpl.getAllConsList();
+        List<CONSUMER_FROM_VW> lst =consumerlistFromVWImpl.getAllConsListByWfAction(statusCode);
+        
+  	  model.addAttribute("statusList", allStatuscodesImpl.getAllStausCodes()); // DB call
+      model.addAttribute("recordCount", lst.size());
+
+        model.addAttribute("records", lst);
+
+        
+        return "conslist";
     }
 
 }

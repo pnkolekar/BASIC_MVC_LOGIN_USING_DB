@@ -26,7 +26,8 @@ public class CONSUMER_FROM_VW {
 	String TenderNo;
 	@Column(name ="LOAD_HP")
 	String LoadHP;
-	
+	@Column(name ="ACTION_CODE")
+	String actionId;
 	
 	
 }

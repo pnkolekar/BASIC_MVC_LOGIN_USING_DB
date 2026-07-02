@@ -11,17 +11,21 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
-public class ConsumerlistFromVWImpl {
+public class ConsumerlistService {
 
 	private static ConsumerlistFromVW consumerlistFromVW;
 	
-	public ConsumerlistFromVWImpl(ConsumerlistFromVW pConsumerlistFromVW) {
+	public ConsumerlistService(ConsumerlistFromVW pConsumerlistFromVW) {
 		// TODO Auto-generated constructor stub
 		this.consumerlistFromVW = pConsumerlistFromVW;
 	}
 	
 	public static List<CONSUMER_FROM_VW> getAllConsList(){
 		return consumerlistFromVW.findAll();
+	}
+	
+	public static List<CONSUMER_FROM_VW> getAllConsListByWfAction(String actionId){
+		return consumerlistFromVW.findByActionId(actionId);
 	}
 	
 }

@@ -11,4 +11,6 @@ import com.msedcl.mvc.main.entity.CONSUMER_FROM_VW;
 public interface ConsumerlistFromVW  extends JpaRepository<CONSUMER_FROM_VW, String>{
 	List<CONSUMER_FROM_VW> findAll();
 
+	List<CONSUMER_FROM_VW> findByActionId(String actionId);
+	
 }
