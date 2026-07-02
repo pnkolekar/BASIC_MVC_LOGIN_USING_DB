@@ -18,4 +18,10 @@ public class AppUsers {
 	@Column(name = "username")
 	private String usernames;
 
+	@Column(name = "email")
+	private String emailID;
+	
+	@Column(name = "vendorcode")
+	private String vendorCode;
+	
 }

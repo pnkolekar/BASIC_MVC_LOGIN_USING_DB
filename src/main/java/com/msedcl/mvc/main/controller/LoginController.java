@@ -1,5 +1,7 @@
 package com.msedcl.mvc.main.controller;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
@@ -15,8 +17,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.msedcl.mvc.main.entity.AppUsers;
-import com.msedcl.mvc.main.entity.repository.MVCUsersRepository;
+import com.msedcl.mvc.main.repository.MVCUsersRepository;
 import com.msedcl.mvc.main.service.MVCUserServiceImpl;
+import com.msedcl.mvc.main.util.CommonUtils;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -32,7 +35,7 @@ public class LoginController {
 
 	@PostMapping("/login")
 	public String processLogin(@RequestParam String username, @RequestParam String password, HttpSession session,
-			Model model) {
+			Model model) throws MalformedURLException, IOException {
 		boolean result = false;
 
 		if (true) {
@@ -55,6 +58,14 @@ public class LoginController {
 				// For demo: print to console. In real app you'd SMS/email this
 				System.out.println("Generated OTP for " + username + ": " + generatedOTP);
 				session.setAttribute("OTP", generatedOTP);
+				
+				String mbody = generatedOTP+" is the OTP for Login to MTSKPY portal. This OTP is valid till 15 min. MSEDCL";
+//fetching email
+	        	AppUsers existingUser = impl.getByUsername(username);
+				//model.addAttribute("emailIDD",existingUser.getEmailID());
+	            //CommonUtils.sendEmail("mtskp_support@mahadiscom.in", "p1zmnj",existingUser.getEmailID() , "OTP for login to MTSKPY portal", mbody);
+CommonUtils.postOTPURL(generatedOTP);
+	            //----------
 				
 				// add expiry time also in session
 				session.setAttribute("OTP_EXPIRY", Instant.now().plus(Duration.ofMinutes(5)));
@@ -109,6 +120,9 @@ public class LoginController {
 				// OTP correct - clear it from session
 				session.removeAttribute("OTP");
 				model.addAttribute("user", username);
+				
+				AppUsers existingUser = impl.getByUsername(username);
+				model.addAttribute("emailIDD",existingUser.getEmailID());
 				return "success";
 			}
 

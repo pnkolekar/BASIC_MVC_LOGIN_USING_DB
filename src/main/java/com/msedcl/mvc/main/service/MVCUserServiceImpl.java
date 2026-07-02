@@ -2,15 +2,17 @@ package com.msedcl.mvc.main.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.stereotype.Service;
 import com.msedcl.mvc.main.entity.*;
+import com.msedcl.mvc.main.repository.MVCUsersRepository;
 
-import com.msedcl.mvc.main.entity.repository.MVCUsersRepository;
+import lombok.extern.slf4j.Slf4j;
 
 
-
+@Slf4j
 @Service
 public class MVCUserServiceImpl {
 	private  static  MVCUsersRepository mvcUsersRepository;
@@ -23,8 +25,15 @@ public class MVCUserServiceImpl {
 		List<AppUsers> lst = new ArrayList<>();
 		
 		lst = mvcUsersRepository.findAll();
+		for (AppUsers appUsers : lst) {
+			//log.info(appUsers.toString());
+		}
 		return lst;
 		
+	}
+	
+	public AppUsers getByUsername(String uname) {
+	    return mvcUsersRepository.findByUsernames(uname); // or throw exception if not found
 	}
 
 	public String generateOTP() {

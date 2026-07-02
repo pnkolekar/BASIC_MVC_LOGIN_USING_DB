@@ -8,8 +8,11 @@
     </style>
 </head>
 <body>
-    <h2>Welcome <span th:text="${user}"></span>!</h2>
+    <h2>Welcome <span th:text="${user}"></span>!</h2><br>
+	<h2>Welcome <span th:text="${emailIDD}"></span>!</h2>
+
     <p>Login successful!</p>
-    <a th:href="@{/login}">Logout</a>
+    <a th:href="@{/login}">Logout</a>	<a th:href="@{/search}">List</a>
+
 </body>
 </html>
